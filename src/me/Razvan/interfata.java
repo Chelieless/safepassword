@@ -8,6 +8,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,7 +23,7 @@ public class interfata extends Application{
 	
 	static Stage window;
 	Button quit, generate;
-	Label text;
+	Label text, copyright;
 	CheckBox special;
 	TextField size, generated;
 	static boolean specialChecked = false;
@@ -45,6 +46,7 @@ public class interfata extends Application{
 		generate = new Button("Generate");
 		size = new TextField();
 		text = new Label("Password Length: ");
+		copyright = new Label("Random Password Generator v1\nContact author: skopeee@gmail.com");
 		special = new CheckBox("Use special characters?");
 		size.setPromptText("Enter your maximum password length here");
 		generated = new TextField();
@@ -60,6 +62,10 @@ public class interfata extends Application{
 			
 		});
 		
+		HBox info = new HBox();
+		info.getChildren().add(copyright);
+		info.setAlignment(Pos.BASELINE_RIGHT);
+		
 		HBox buttons = new HBox();
 		buttons.getChildren().addAll(generate, quit);
 		buttons.setAlignment(Pos.CENTER);
@@ -71,7 +77,7 @@ public class interfata extends Application{
 		input.setSpacing(10);
 		
 		VBox panel = new VBox();
-		panel.getChildren().addAll(input, generated, buttons);
+		panel.getChildren().addAll(input, generated, buttons, info);
 		panel.setSpacing(25);
 		panel.setAlignment(Pos.CENTER);
 		
@@ -94,7 +100,6 @@ public class interfata extends Application{
 		} catch(NumberFormatException e) {
 			
 			error();
-			
 		}
 		
 		return pass;
