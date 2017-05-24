@@ -13,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
+@SuppressWarnings("unused")
 public class interfata extends Application{
 	
 	public static void main(String[] args) {
