@@ -1,7 +1,6 @@
 package me.Razvan;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,7 +24,7 @@ public class interfata extends Application{
 	Button quit, generate;
 	Label text;
 	CheckBox special;
-	TextField size;
+	TextField size, generated;
 	static boolean specialChecked = false;
 	
 	@Override
@@ -33,7 +32,7 @@ public class interfata extends Application{
 		window = stage;
 		window.setTitle("Safe Password Generator - v1");
 		window.setResizable(false);
-		window.setMinHeight(150);
+		window.setMinHeight(200);
 		window.setMinWidth(550);
 		window.setOnCloseRequest(e -> {
 			
@@ -48,8 +47,18 @@ public class interfata extends Application{
 		text = new Label("Password Length: ");
 		special = new CheckBox("Use special characters?");
 		size.setPromptText("Enter your maximum password length here");
-		
+		generated = new TextField();
+		generated.setEditable(false);
+		generated.setPromptText("Generated password goes here");
 		quit.setOnAction(e -> quit());
+		generate.setOnAction(e -> {
+			
+			if(special.isSelected()) specialChecked = true;
+			generated.setText(Generate(size, specialChecked));
+			specialChecked = false;
+			
+			
+		});
 		
 		HBox buttons = new HBox();
 		buttons.getChildren().addAll(generate, quit);
@@ -62,7 +71,7 @@ public class interfata extends Application{
 		input.setSpacing(10);
 		
 		VBox panel = new VBox();
-		panel.getChildren().addAll(input, buttons);
+		panel.getChildren().addAll(input, generated, buttons);
 		panel.setSpacing(25);
 		panel.setAlignment(Pos.CENTER);
 		
@@ -71,10 +80,28 @@ public class interfata extends Application{
 		window.show();
 		
 	}
-
+	
+	private static String Generate(TextField len, boolean special) {
+		
+		String pass = null;
+		
+		try {
+			
+			int length = Integer.parseInt(len.getText());
+			if(length <= 0 || length > 128) error();
+			if(length > 0 && length <= 128) pass = generator.Generate(length, special);
+			
+		} catch(NumberFormatException e) {
+			
+			error();
+			
+		}
+		
+		return pass;
+	}
+	
 	private static void quit() {
 		
-		boolean quit = false;
 		Button quitButton, cancel;
 		Label text = new Label("Are you sure you want to quit?");
 		quitButton = new Button("Quit");
@@ -98,6 +125,31 @@ public class interfata extends Application{
 		buttons.setSpacing(10);
 		
 		panel.getChildren().addAll(text, buttons);
+		panel.setAlignment(Pos.CENTER);
+		panel.setSpacing(25);
+		
+		Scene scene = new Scene(panel);
+		window.setScene(scene);
+		window.showAndWait();
+		
+	}
+	
+	private static void error() {
+		
+		window = new Stage();
+		window.setTitle("Error");
+		window.setResizable(false);
+		window.initModality(Modality.APPLICATION_MODAL);
+		window.setMinHeight(150);
+		window.setMinWidth(350);
+		
+		Button ok = new Button("OK");
+		Label error = new Label("You can only enters numbers in password length box (1 - 128)");
+		
+		ok.setOnAction(e -> window.close());
+		
+		VBox panel = new VBox();
+		panel.getChildren().addAll(error, ok);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(25);
 		
